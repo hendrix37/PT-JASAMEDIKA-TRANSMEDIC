@@ -44,4 +44,9 @@ class Car extends Model
     {
         return $this->hasMany(ReturnCar::class);
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['brand'] . ' (' . $this->attributes['model'] . ')';
+    }
 }

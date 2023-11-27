@@ -16,6 +16,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RentalCarResource extends Resource
 {
+    protected static ?string $navigationGroup = 'Transaction';
+
+    protected static ?string $navigationLabel = 'Rental Car';
+
+    protected static ?string $pluralModelLabel = 'Rental Car';
+
     protected static ?string $model = RentalCar::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -27,7 +33,12 @@ class RentalCarResource extends Resource
                 Forms\Components\Select::make('car_id')
                     ->relationship(
                         name: 'car',
-                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('model'),
+                        // modifyQueryUsing: fn (Builder $query) => $query->orderBy('model'),
+
+                        modifyQueryUsing: function (Builder $query) {
+                            // Hanya menampilkan mobil yang tidak memiliki relasi dengan rental
+                            $query->whereDoesntHave('rentalCars');
+                        },
                     )
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->model} ({$record->brand}) ")
                     ->searchable(['brand', 'model'])
@@ -37,7 +48,7 @@ class RentalCarResource extends Resource
                     ->required()
                     ->label('Nama Penyewa'),
                 Forms\Components\DateTimePicker::make('start_date'),
-                Forms\Components\DateTimePicker::make('end_date'),
+                Forms\Components\DateTimePicker::make('end_date')->after('start_date'),
             ]);
     }
 
@@ -45,8 +56,7 @@ class RentalCarResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('car.brand')
-                    ->formatStateUsing(fn (string $state): string => __("car.{$state}"))
+                Tables\Columns\TextColumn::make('car.full_name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()

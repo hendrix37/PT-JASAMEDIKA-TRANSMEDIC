@@ -17,6 +17,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CarResource extends Resource
 {
+    protected static ?string $navigationGroup = 'Transaction';
+
+    protected static ?string $navigationLabel = 'Car';
+
+    protected static ?string $pluralModelLabel = 'Car';
+
     protected static ?string $model = Car::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -56,6 +62,7 @@ class CarResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('daily_rental_rate')
                     ->numeric()
+                    ->money('IDR')
                     ->sortable(),
                 ImageColumn::make('photo_car')
                     ->disk('public'),

@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ReturnCarResource\Pages;
 use App\Filament\Admin\Resources\ReturnCarResource\RelationManagers;
+use App\Models\Car;
 use App\Models\ReturnCar;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,6 +16,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReturnCarResource extends Resource
 {
+    protected static ?string $navigationGroup = 'Transaction';
+
+    protected static ?string $navigationLabel = 'Return Car';
+
+    protected static ?string $pluralModelLabel = 'Return Car';
+
     protected static ?string $model = ReturnCar::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -23,9 +30,6 @@ class ReturnCarResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('car_id')
-                    ->relationship('car', 'id')
-                    ->required(),
                 Forms\Components\Select::make('rental_id')
                     ->relationship('rental', 'id')
                     ->required(),

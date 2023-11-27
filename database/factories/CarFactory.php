@@ -24,8 +24,8 @@ class CarFactory extends Factory
             'uuid' => $this->faker->uuid(),
             'brand' => $this->faker->word(),
             'model' => $this->faker->word(),
-            'license_plate' => $this->faker->word(),
-            'daily_rental_rate' => $this->faker->randomFloat(0, 0, 9999999999.),
+            'license_plate' => 'AB ' . $this->faker->numberBetween($min = 1000, $max = 9000) . ' xx',
+            'daily_rental_rate' => $this->faker->randomFloat(0, 0, 250000.),
             'photo_car' => $this->faker->word(),
         ];
     }
